@@ -1,8 +1,17 @@
 # Implementation Plan: Building Your First Enterprise Agent
 
+> **Note for Hackathon Participants**: This document is a **reference guide** showing what Bob Shell will generate for you. You don't need to follow these steps manually - instead, describe your agent idea to Bob and it will create all these files automatically using the `wxo-adk-agent` skill.
+>
+> **How to use this document**:
+> - Read it to understand the agent development workflow
+> - Use it as a reference when Bob generates code
+> - Refer to it if you need to manually fix or customize something Bob created
+
 ## Overview
 
-This plan walks you through building a simple watsonx Orchestrate enterprise agent with 1-2 tools. We'll use the **Weather Travel Advisor** as our example, but the same pattern applies to any agent.
+This plan shows the complete workflow for building a watsonx Orchestrate enterprise agent with 1-2 tools. We use the **Weather Travel Advisor** as an example, but the same pattern applies to any agent.
+
+**Hackathon Workflow**: Describe your idea to Bob → Bob generates everything → You deploy → You demo
 
 ---
 

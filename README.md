@@ -48,12 +48,45 @@ WO_AUTH_TYPE=production
 
 > **Note**: These credentials are for hackathon use only and are shared among all participants. Do not use for production workloads.
 
+## 🤖 Hackathon Workflow: Build with Bob
+
+**This hackathon is designed for Bob Shell (coding agent) users.** Instead of manually writing code, you'll describe what you want to build and Bob will generate all the files, tests, and deployment commands.
+
+### How It Works
+
+1. **You describe** your agent idea in natural language
+2. **Bob generates** the Python tools, YAML configs, tests, and deployment commands
+3. **You deploy** to the shared hackathon instance
+4. **You demo** in the hosted chat UI
+
+The `wxo-adk-agent` skill (in `wxo-adk-agent/`) contains all the templates and references Bob needs. When you mention "watsonx Orchestrate", "@tool", or "agent", Bob automatically uses this skill to generate production-ready code.
+
+### Example Interaction
+
+```
+You: "Build me a weather travel agent that checks forecasts and suggests what to pack"
+
+Bob: [Generates tools/get_weather_forecast.py, agents/weather_agent.yaml, 
+      connections/openweather.yaml, tests, and provides deployment commands]
+
+You: [Run the deployment commands Bob provides]
+
+You: [Test in hosted chat at $WO_INSTANCE_URL/chat]
+```
+
+### Reference Materials
+
+- **implementation_plan.md** - Understand what Bob generates (reference only, not a manual tutorial)
+- **agent_ideas_brainstorm.md** - 12 use cases to choose from
+- **wxo-adk-agent/references/** - Templates and schemas Bob uses
+
 ## 🚀 Quick Start
 
 ### Prerequisites
 
 - **Python 3.11-3.13** (NOT 3.14 - ADK requires <3.14)
 - **Git** for version control
+- **Bob Shell** installed and configured
 
 ### 1. Clone and Setup
 
