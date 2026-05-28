@@ -9,7 +9,7 @@ Build and deploy enterprise AI agents to IBM watsonx Orchestrate using the Agent
 All participants share one hosted instance:
 
 ```bash
-WO_INSTANCE_API_KEY=***REMOVED***
+WO_INSTANCE_API_KEY=<API-KEY>
 WO_INSTANCE_URL=https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/f0486067-ab8a-458e-9db1-c44bc11bf146
 ```
 
