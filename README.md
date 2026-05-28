@@ -103,33 +103,26 @@ $ uv run orchestrate --version
 > This guide will assume macOS / Linux from now on
 
 ```bash
-# Set environment variables (do NOT commit .env with real keys)
-$ export WO_INSTANCE_URL="https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/f0486067-ab8a-458e-9db1-c44bc11bf146"
-$ export WO_INSTANCE_API_KEY="<YOUR_API_KEY>"  # Get from organizers
-$ export WO_IAM_URL="https://iam.cloud.ibm.com"
-$ export WO_AUTH_TYPE="ibm_iam"
+# Create .env file
+$ cp env.example .env
 
-# Register (idempotent - safe to run multiple times)
-$ printf 'Y\n' | uv run orchestrate env add \
+# Load credentials
+$ source .env   # or set the variables manually
+
+# Register
+$ uv run orchestrate env add \
     --name hackathon \
-    --url "$WO_INSTANCE_URL" \
-    --type ibm_iam \
-    --iam-url "https://iam.cloud.ibm.com"
+    --url $WO_INSTANCE_URL \
+    --iam-url $WO_IAM_URL \
+    --type $WO_AUTH_TYPE
+[INFO] - Environment 'hackathon' has been created
 
-# Activate (non-interactive with --api-key flag)
-$ uv run orchestrate env activate hackathon --api-key "$WO_INSTANCE_API_KEY"
+# Activate
+$ uv run orchestrate env activate hackathon --api-key $WO_INSTANCE_API_KEY
 
 # Confirm
 $ uv run orchestrate env list
 ```
-
-**Authentication Facts:**
-
-1. **Non-interactive auth works**: Use `orchestrate env activate <env> --api-key "$KEY"`. The interactive prompt only appears when you omit `--api-key`.
-
-2. **Environment variables are ignored**: The CLI does NOT read `WO_*` environment variables for authentication. You must use the `--api-key` flag.
-
-3. **IAM URL must be the base URL**: Use `https://iam.cloud.ibm.com` (no `/identity/token` suffix). The CLI appends the correct path internally.
 
 ---
 
