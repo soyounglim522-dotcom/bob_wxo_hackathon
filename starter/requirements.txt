@@ -1,0 +1,9 @@
+# Python: install into a venv built from Python 3.11, 3.12, or 3.13. The
+# package pins <3.14,>=3.11 and pip enforces it (3.14 will fail). See
+# starter/INSTALL.md for the full setup.
+
+ibm-watsonx-orchestrate>=2.0.0
+pydantic>=2
+requests>=2.32.5
+pytest>=8
+python-dotenv>=1
