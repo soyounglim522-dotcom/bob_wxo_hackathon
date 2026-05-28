@@ -107,6 +107,8 @@ $ cp env.example .env
 # Load credentials
 $ source .env   # or set the variables manually
 
+# NOTE: Get the missing credentials from the Google Form!
+
 # Register
 $ uv run orchestrate env add \
     --name hackathon \
@@ -121,6 +123,8 @@ $ uv run orchestrate env activate hackathon --api-key $WO_INSTANCE_API_KEY
 # Confirm
 $ uv run orchestrate env list
 ```
+
+> NOTE: MAKE SURE TO GET THE MISSING CREDENTIALS FROM THE GOOGLE FORM
 
 ---
 
