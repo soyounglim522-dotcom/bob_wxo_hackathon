@@ -16,19 +16,74 @@ Prefix every python related command with `uv run` to make sure that the correct 
 
 ```bash
 # Test
-pytest tools/                    # unit tests for all tools
-pytest tools/my_tool_test.py     # single tool test
+uv run pytest tools/                    # unit tests for all tools
+uv run pytest tools/my_tool_test.py     # single tool test
 
 # Deploy (order is mandatory: connections → tools → agents)
-orchestrate env list             # verify active environment first (missing step = silent fail)
-orchestrate connections add --file connections/my_app.yaml
-orchestrate connections configure --connection-name my_app --env draft
-orchestrate connections set-credentials --connection-name my_app --env draft
-orchestrate tools import --file tools/my_tool.py --app-id my_app --requirements-file requirements.txt
-orchestrate agents import --file agents/my_agent.yaml
+# 1. Register and activate environment (one-time setup)
+printf 'Y\n' | uv run orchestrate env add \
+  --name hackathon \
+  --url "$WO_INSTANCE_URL" \
+  --type ibm_iam \
+  --iam-url "https://iam.cloud.ibm.com"
 
-# Promote Draft → Live
+uv run orchestrate env activate hackathon --api-key "$WO_INSTANCE_API_KEY"
+uv run orchestrate env list             # verify active environment
+
+# 2. Deploy in order: connections → tools → agents
+uv run orchestrate connections import --file connections/my_app.yaml
+uv run orchestrate tools import --kind python --file tools/my_tool.py --app-id my_app
+uv run orchestrate agents import --file agents/my_agent.yaml
+
+# 3. Promote Draft → Live
 # Use the web UI at $WO_INSTANCE_URL/manage/connectors — no CLI command for this
+```
+
+## Authentication Facts
+
+**Non-interactive authentication works**: Use `orchestrate env activate <env> --api-key "$KEY"`. The interactive prompt only appears when you omit `--api-key`.
+
+**Environment variables are ignored**: The CLI does NOT read `WO_*` environment variables for authentication. You must use the `--api-key` flag or respond to the interactive prompt.
+
+**IAM URL must be the base URL**: Use `https://iam.cloud.ibm.com` (no `/identity/token` suffix). The CLI appends the correct path internally.
+
+## Common Deployment Issues
+
+### Issue 1: "Error getting IBM_IAM Token" or HTTP 404 on activate
+
+**Cause**: Wrong or stale IAM URL registered with the environment.
+
+**Fix**: Re-register with the correct base IAM URL:
+```bash
+printf 'Y\n' | uv run orchestrate env add \
+  --name hackathon \
+  --url "$WO_INSTANCE_URL" \
+  --type ibm_iam \
+  --iam-url "https://iam.cloud.ibm.com"
+
+uv run orchestrate env activate hackathon --api-key "$WO_INSTANCE_API_KEY"
+```
+
+The IAM URL is the base (`https://iam.cloud.ibm.com`) with no `/identity/token` suffix. `env add` is idempotent — pipe `Y` to confirm the overwrite prompt.
+
+### Issue 2: "cannot import name 'tool' from 'ibm_watsonx_orchestrate'"
+
+**Cause**: Wrong import path in your tool file.
+
+**Fix**: Use the correct import:
+```python
+from ibm_watsonx_orchestrate.agent_builder.tools import tool
+```
+
+See `skills/wxo-adk-agent/references/tool_template.py` for the correct pattern.
+
+### Issue 3: "The token found for environment 'hackathon' is missing or expired"
+
+**Cause**: Environment not activated or token expired.
+
+**Fix**: Re-activate with the API key:
+```bash
+uv run orchestrate env activate hackathon --api-key "$WO_INSTANCE_API_KEY"
 ```
 
 ## Critical Naming Rule
