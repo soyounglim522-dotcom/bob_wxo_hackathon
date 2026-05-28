@@ -165,7 +165,7 @@ tests/my_scenario.json    ← Journey Success test case
 
 ```bash
 # 1. Run unit tests
-uv run pytest tools/
+uv run pytest tests/
 
 # 2. Check active environment
 uv run orchestrate env list
