@@ -37,7 +37,7 @@ cp ../starter/env.example .env
 # WO_INSTANCE_URL=https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/f0486067-ab8a-458e-9db1-c44bc11bf146
 # WO_INSTANCE_API_KEY=***REMOVED***
 # WO_IAM_URL=https://iam.cloud.ibm.com
-# WO_AUTH_TYPE=production
+# WO_AUTH_TYPE=ibm_iam
 # WO_ENV_NAME=hackathon
 
 # Create project structure

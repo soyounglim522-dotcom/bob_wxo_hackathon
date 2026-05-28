@@ -9,8 +9,6 @@ my-wxo-agent/
     my_tool_test.py        # co-located test
   connections/
     my_app.yaml            # `app_id:` == file stem
-  .env                     # copy from env.example, never commit
-  requirements.txt
 ```
 
 ## The one convention that matters

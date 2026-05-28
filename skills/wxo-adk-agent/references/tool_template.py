@@ -118,5 +118,7 @@ def my_tool_function_name(query: str, limit: int = 10) -> ToolResponse[Response]
     payload = api_response.json()
     return ToolResponse(
         error_details=None,
-        tool_output=Response(summary=f"Found {len(payload.get('items', []))} results", raw=payload),
+        tool_output=Response(
+            summary=f"Found {len(payload.get('items', []))} results", raw=payload
+        ),
     )

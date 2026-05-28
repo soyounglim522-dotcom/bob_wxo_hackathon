@@ -1,288 +1,239 @@
 # watsonx Orchestrate Hackathon Bundle
 
-A comprehensive toolkit for building and deploying enterprise AI agents to IBM watsonx Orchestrate using the Agent Development Kit (ADK). This bundle enables developers to rapidly build production-ready agents with Python tools, YAML configurations, and direct deployment to hosted Orchestrate instances.
+Build and deploy enterprise AI agents to IBM watsonx Orchestrate using the Agent Development Kit (ADK). Describe what you want to build, Bob generates the code, and you deploy straight to a shared hosted instance — no Docker, no local server.
 
-## 🎯 What's Included
+---
 
-### Core Components
+## Hackathon Tenant Credentials
 
-- **📚 Starter Templates** (`starter/`)
-  - Project layout guide
-  - Environment configuration template
-  - Installation instructions for all platforms
-  - Pinned dependencies (Python 3.11-3.13)
-
-- **🛠️ wxo-adk-agent Skill** (`wxo-adk-agent/`)
-  - Complete reference documentation
-  - Tool and agent templates
-  - Connection configuration examples
-  - Deployment recipes and troubleshooting guides
-  - Common pitfalls and solutions
-  - Journey Success evaluation templates
-
-- **💡 Agent Ideas** (`agent_ideas_brainstorm.md`)
-  - Tiered use cases by complexity
-  - Implementation time estimates
-  - Suggested tool combinations
-
-- **📋 Implementation Plan** (`implementation_plan.md`)
-  - Step-by-step development workflow
-  - Testing strategies
-  - Deployment checklist
-
-## 🎯 Hackathon Tenant Credentials
-
-**Dedicated Hackathon Instance** - All participants can use these shared credentials:
+All participants share one hosted instance:
 
 ```bash
-# Instance URL
-WO_INSTANCE_URL=https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/f0486067-ab8a-458e-9db1-c44bc11bf146
-
-# API Key (shared for hackathon use only)
 WO_INSTANCE_API_KEY=***REMOVED***
-
-# IAM Configuration (US South Production)
-WO_IAM_URL=https://iam.cloud.ibm.com
-WO_AUTH_TYPE=production
+WO_INSTANCE_URL=https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/f0486067-ab8a-458e-9db1-c44bc11bf146
 ```
 
-> **Note**: These credentials are for hackathon use only and are shared among all participants. Do not use for production workloads.
+> These are shared among all hackathon participants. Do not use for production workloads.
 
-## 🤖 Hackathon Workflow: Build with Bob
+---
 
-**This hackathon is designed for Bob Shell (coding agent) users.** Instead of manually writing code, you'll describe what you want to build and Bob will generate all the files, tests, and deployment commands.
-
-### How It Works
-
-1. **You describe** your agent idea in natural language
-2. **Bob generates** the Python tools, YAML configs, tests, and deployment commands
-3. **You deploy** to the shared hackathon instance
-4. **You demo** in the hosted chat UI
-
-The `wxo-adk-agent` skill (in `wxo-adk-agent/`) contains all the templates and references Bob needs. When you mention "watsonx Orchestrate", "@tool", or "agent", Bob automatically uses this skill to generate production-ready code.
-
-### Example Interaction
-
-```
-You: "Build me a weather travel agent and upload it to Orchestrate with evaluation test cases"
-
-Bob: [Generates tools/get_weather_forecast.py, agents/weather_agent.yaml, 
-      connections/openweather.yaml, tests/weather_test.json, and provides deployment commands]
-
-You: [Review and approve deployment]
-
-Bob: [Deploys to hackathon instance and uploads test cases]
-
-You: [Demo in hosted chat at $WO_INSTANCE_URL/chat and run evaluations]
-```
-
-### Reference Materials
-
-- **implementation_plan.md** - Understand what Bob generates (reference only, not a manual tutorial)
-- **agent_ideas_brainstorm.md** - 12 use cases to choose from
-- **wxo-adk-agent/references/** - Templates and schemas Bob uses
-
-## 🚀 Quick Start
-
-### Prerequisites
-
-- **Python 3.11-3.13** (NOT 3.14 - ADK requires <3.14)
-- **Git** for version control
-- **Bob Shell** installed and configured
-
-### 1. Clone and Setup
+## 0. Get Repo
 
 ```bash
-# Clone the repository
-git clone https://github.com/colehurwitz/bob_wxo_hackathon.git
-cd bob_wxo_hackathon
-
-# Create virtual environment
-python3.12 -m venv .venv
-source .venv/bin/activate  # Windows: .venv\Scripts\activate
-
-# Install ADK CLI
-pip install ibm-watsonx-orchestrate
-orchestrate --version
+# Clone and cd into the repo
+$ git clone https://github.com/colehurwitz/bob_wxo_hackathon.git
+$ cd bob_wxo_hackathon
 ```
 
-### 2. Configure Environment
+## 1. Setup Bob
+
+Copy the MCP server config and skills into Bob's config directory so it can talk to watsonx Orchestrate and load the agent-building skill:
 
 ```bash
-# Copy environment template
-cp starter/env.example .env
+# Create Bob's config directory
+mkdir -p .bob
 
-# Edit .env with your credentials
-# - WO_INSTANCE_URL (from organizer)
-# - WO_INSTANCE_API_KEY (from organizer)
-# - WO_IAM_URL (depends on instance tier)
-# - WO_AUTH_TYPE (depends on instance tier)
+# Register the Orchestrate MCP server
+cp mcp/mcp.json .bob/mcp.json
+
+# Load the wxo-adk-agent skill (provides templates + instructions Bob needs)
+cp -r skills .bob/skills
 ```
 
-### 3. Register Orchestrate Environment
+Restart Bob after copying — it picks up `mcp.json` and skills on startup.
+
+## 2. Setup env
+
+`ibm-watsonx-orchestrate` requires **Python 3.11–3.13** (not 3.14).
+
+This guide uses [uv](https://astral.sh/uv) and it's pip-compatible interface. If you want to use different tooling, go for it!
+
+### macOS / Linux
 
 ```bash
-# Load environment variables
-source .env
+# Install uv
+$ curl -LsSf https://astral.sh/uv/install.sh | sh
 
-# Register and activate environment
-orchestrate env add \
+# Create venv with a compatible Python version and install the ADK
+$ uv sync
+
+# Verify
+$ uv run orchestrate --version
+ADK Version: 2.x.x
+```
+
+> Don't want to curl + pipe to bash? View other [install options](https://docs.astral.sh/uv/getting-started/installation/).
+
+### Windows (PowerShell)
+
+```powershell
+
+# Install uv
+$ powershell -ExecutionPolicy ByPass -c "irm https://astral.sh/uv/install.ps1 | iex"
+
+# Clone and cd into the repo
+$ git clone https://github.com/colehurwitz/bob_wxo_hackathon.git
+$ cd bob_wxo_hackathon
+
+# Create venv and install
+$ uv sync
+
+# Verify
+$ uv run orchestrate --version
+```
+
+> **Every new terminal** you must reactivate the venv before running `orchestrate` commands.
+> `orchestrate: command not found` almost always means the venv isn't active.
+
+### Register the Orchestrate environment
+
+> This guide will assume macOS / Linux from now on
+
+```bash
+# Create .env file
+$ cp env.example .env
+
+# Load credentials
+$ source .env   # or set the variables manually
+
+# Register
+$ uv run orchestrate env add \
     --name hackathon \
     --url $WO_INSTANCE_URL \
     --iam-url $WO_IAM_URL \
     --type $WO_AUTH_TYPE
+[INFO] - Environment 'hackathon' has been created
 
-orchestrate env activate hackathon --api-key $WO_INSTANCE_API_KEY
+# Activate
+$ uv run orchestrate env activate hackathon --api-key $WO_INSTANCE_API_KEY
 
-# Verify
-orchestrate env list
+# Confirm
+$ uv run orchestrate env list
 ```
-
-### 4. Start Building
-
-Follow the project layout guide in `starter/project_layout.md` to structure your agent project.
-
-## 📖 Documentation
-
-### Essential Reading
-
-1. **[AGENTS.md](AGENTS.md)** - Project overview and architecture
-2. **[HACKATHON.md](HACKATHON.md)** - Hackathon-specific workflow and tips
-3. **[starter/INSTALL.md](starter/INSTALL.md)** - Platform-specific installation
-4. **[starter/project_layout.md](starter/project_layout.md)** - Recommended structure
-
-### Reference Documentation (`wxo-adk-agent/references/`)
-
-- **[tool_template.py](wxo-adk-agent/references/tool_template.py)** - Runnable tool skeleton
-- **[tool_test_template.py](wxo-adk-agent/references/tool_test_template.py)** - pytest template
-- **[agent_collaborator.yaml](wxo-adk-agent/references/agent_collaborator.yaml)** - Worker agent template
-- **[agent_manager.yaml](wxo-adk-agent/references/agent_manager.yaml)** - Router agent template
-- **[connection_basic_auth.yaml](wxo-adk-agent/references/connection_basic_auth.yaml)** - Auth configs
-- **[connection_oauth.yaml](wxo-adk-agent/references/connection_oauth.yaml)** - OAuth flow
-- **[yaml_schema.md](wxo-adk-agent/references/yaml_schema.md)** - Complete field reference
-- **[deploy_recipe.md](wxo-adk-agent/references/deploy_recipe.md)** - Deployment commands
-- **[evaluation_recipe.md](wxo-adk-agent/references/evaluation_recipe.md)** - Test case grading
-- **[pitfalls.md](wxo-adk-agent/references/pitfalls.md)** - Common mistakes and fixes
-- **[remote_setup.md](wxo-adk-agent/references/remote_setup.md)** - Environment configuration
-
-## 🏗️ Architecture
-
-### Three-Primitive Model
-
-1. **Tools** - Python functions decorated with `@tool`, containing business logic
-2. **Agents** - YAML specifications defining LLM behavior and tool bindings
-3. **Connections** - YAML configurations for external API authentication
-
-### Agent Types
-
-- **Collaborator Agents** - Workers that execute tools directly
-- **Manager Agents** - Pure routers that delegate to collaborator agents
-
-## 🎓 Use Cases by Complexity
-
-### Tier 1 - Single Tool (~2 hours)
-- PTO balance lookup
-- GitHub PR digest
-- Next meeting finder
-- Expense lookup
-- Weather travel reminder
-
-### Tier 2 - Multi-Tool Agent (~½ day)
-- IT helpdesk (KB → ticket → status)
-- Sales lead enricher
-- RFP tracker
-- Document summarizer
-
-### Tier 3 - Manager + Collaborators (full day)
-- Employee onboarding orchestrator
-- Customer support triage
-- Finance close assistant
-
-## 🔧 Development Workflow
-
-### Standard Iteration Loop
-
-```bash
-# 1. Write/modify tool
-vim tools/my_tool.py
-
-# 2. Run unit tests
-pytest tools/my_tool_test.py -v
-
-# 3. Deploy to hosted instance
-orchestrate env list  # Verify active environment
-orchestrate tools import --kind python --file tools/my_tool.py \
-    --app-id my_app --requirements-file requirements.txt
-orchestrate agents import --file agents/my_agent.yaml
-
-# 4. Test in hosted chat
-# Navigate to $WO_INSTANCE_URL/chat
-
-# 5. Upload test case (for judges)
-# See wxo-adk-agent/references/evaluation_recipe.md
-```
-
-## 🧪 Testing
-
-### Unit Tests
-```bash
-pytest tools/  # Fast local feedback loop
-```
-
-### Integration Tests
-- Hosted chat UI - Where LLM behavior actually runs
-- Navigate to `$WO_INSTANCE_URL/chat`
-
-### Journey Success Tests
-- JSON test cases uploaded via HTTP API
-- Graded by the platform
-- See `wxo-adk-agent/references/evaluation_recipe.md`
-
-## 🔐 Security Best Practices
-
-- Never commit `.env` files (use `.gitignore`)
-- Store API keys in environment variables, not code
-- Use Draft environment for development
-- Promote to Live only after testing
-- Always specify `--requirements-file` when importing tools
-- Run `pytest` before every deployment
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-| Symptom | Fix |
-|---------|-----|
-| `orchestrate: command not found` | Activate virtual environment: `source .venv/bin/activate` |
-| `Scope not found` error | Wrong IAM URL or auth type - check `wxo-adk-agent/references/remote_setup.md` |
-| Tool doesn't appear after import | Forgot `--requirements-file` flag |
-| Agent doesn't call tool | Connection not promoted to Live, or tool name mismatch |
-| Test case upload fails | Wrong multipart format - use `-F "file=@...;type=application/json"` |
-
-See **[wxo-adk-agent/references/pitfalls.md](wxo-adk-agent/references/pitfalls.md)** for detailed solutions.
-
-## 📚 Additional Resources
-
-- **Official Documentation**: [developer.watson-orchestrate.ibm.com](https://developer.watson-orchestrate.ibm.com)
-- **Python Connections Guide**: [Python Connections](https://developer.watson-orchestrate.ibm.com/connections/associate_connection_to_tool/python_connections)
-- **ADK Package**: [ibm-watsonx-orchestrate on PyPI](https://pypi.org/project/ibm-watsonx-orchestrate/)
-
-## 🤝 Contributing
-
-This is a hackathon bundle - focus on building your agent! The templates and references are provided as-is for rapid development.
-
-## 📄 License
-
-IBM watsonx Orchestrate Agent Development Kit
-
-## 🎉 Getting Help
-
-- Full documentation in `wxo-adk-agent/references/`
-- Hackathon flow overview in `HACKATHON.md`
-- Installation troubleshooting in `starter/INSTALL.md`
-- Common failures in `wxo-adk-agent/references/deploy_recipe.md`
-- Pitfall examples in `wxo-adk-agent/references/pitfalls.md`
 
 ---
 
-**Ready to build?** Start with `starter/project_layout.md` and choose a use case from `agent_ideas_brainstorm.md`!
+## 3. Start Building
+
+You're set up. Open Bob and describe what you want to build — Bob will generate
+the tools, YAML configs, tests, and deployment commands for you.
+
+**Example prompt:**
+
+```
+Build me a weather travel agent and upload it to Orchestrate with evaluation test cases
+```
+
+See [HACKATHON.md](HACKATHON.md) for the full build flow, use-case tiers, and judging criteria.
+
+---
+
+## Use Cases (pick one)
+
+| Tier | Effort | Examples |
+|------|--------|----------|
+| **1 — Single tool** | ~2 hrs | PTO balance · GitHub PR digest · Next meeting · Expense lookup · Weather reminder |
+| **2 — Multi-tool agent** | ~½ day | IT helpdesk (KB → ticket → status) · Sales lead enricher · RFP tracker · Document summarizer |
+| **3 — Manager + collaborators** | full day | Employee onboarding (HR + IT + Facilities) · Support triage · Finance close assistant |
+
+---
+
+## Development Workflow
+
+```
+tools/my_tool.py          ← @tool, ToolResponse, docstring
+tools/my_tool_test.py     ← pytest mocks
+connections/my_app.yaml   ← key_value | oauth | basic auth
+agents/my_agent.yaml      ← name, llm, instructions, tools list
+tests/my_scenario.json    ← Journey Success test case
+```
+
+**Naming rule:** filename stem == function name == YAML `name:` field == `tools:` list entry. Drift here is the #1 failure.
+
+### Iteration loop
+
+```bash
+# 1. Run unit tests
+uv run pytest tools/
+
+# 2. Check active environment
+uv run orchestrate env list
+
+# 3. Deploy in order: connections → tools → agents
+uv run orchestrate connections add --app-id my_app
+uv run orchestrate connections configure --app-id my_app --env draft --type team --kind key_value
+uv run orchestrate connections set-credentials --app-id my_app --env draft -e token=$TOKEN
+uv run  ]orchestrate tools import --kind python --file tools/my_tool.py \
+    --app-id my_app --requirements-file requirements.txt
+uv run orchestrate agents import --file agents/my_agent.yaml
+
+# 4. Promote Draft → Live in the UI
+# Open $WO_INSTANCE_URL/manage/connectors → "Paste Draft Credentials"
+
+# 5. Test in hosted chat
+# Navigate to $WO_INSTANCE_URL/chat
+```
+
+---
+
+## Journey Success (judging metric)
+
+Each team uploads at least one Journey Success test case — a JSON file describing:
+
+- The user prompt that starts the conversation
+- The tools the agent must call, in order
+- Argument matching rules (`strict` / `fuzzy` / `optional`)
+- Keywords the final response must contain
+
+Judges click **Run** in the agent's **Tests** tab. The platform executes the full trajectory and shows per-goal pass/fail. Teams are ranked by how many test cases pass.
+
+Upload via HTTP API:
+
+```bash
+TOKEN=$(curl -X POST "$WO_IAM_URL/siusermgr/api/1.0/apikeys/token" \
+    -H "Content-Type: application/json" \
+    -d "{\"apikey\":\"$WO_INSTANCE_API_KEY\"}" \
+    | python3 -c "import sys,json; print(json.load(sys.stdin)['token'])")
+
+AGENT_ID=$(curl -H "Authorization: Bearer $TOKEN" \
+    "$WO_INSTANCE_URL/v1/orchestrate/agents" \
+    | python3 -c "import sys,json; print(next(a['id'] for a in json.load(sys.stdin) if a['name']=='my_agent'))")
+
+curl -X POST -H "Authorization: Bearer $TOKEN" \
+    "$WO_INSTANCE_URL/v1/orchestrate/agent/$AGENT_ID/test_case/v2" \
+    -F "file=@tests/my_test.json;type=application/json"
+```
+
+---
+
+## Troubleshooting
+
+| Symptom | Fix |
+|---------|-----|
+| `orchestrate: command not found` | Run `prefix it with uv run` |
+| `Scope not found` on `env add` | Wrong IAM URL — see `wxo-adk-agent/references/remote_setup.md` |
+| Tool doesn't appear after import | Missing `--requirements-file` flag |
+| Agent doesn't call tool | Connection not promoted to Live, or tool name mismatch |
+| Test case upload fails | Use `-F "file=@...;type=application/json"` (not `-d`) |
+
+---
+
+## Reference
+
+```
+wxo-adk-agent/references/
+  tool_template.py          ← @tool skeleton
+  tool_test_template.py     ← pytest template
+  agent_collaborator.yaml   ← worker agent template
+  agent_manager.yaml        ← router agent template
+  connection_basic_auth.yaml
+  connection_oauth.yaml
+  yaml_schema.md            ← complete YAML field reference
+  deploy_recipe.md          ← full deployment command reference
+  evaluation_recipe.md      ← test case upload and grading
+  pitfalls.md               ← seven common mistakes with fixes
+  remote_setup.md           ← IAM config for non-production instances
+```
+
+- Official docs: [developer.watson-orchestrate.ibm.com](https://developer.watson-orchestrate.ibm.com)
+- ADK package: [ibm-watsonx-orchestrate on PyPI](https://pypi.org/project/ibm-watsonx-orchestrate/)
