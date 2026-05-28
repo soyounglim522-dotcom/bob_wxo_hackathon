@@ -64,14 +64,16 @@ The `wxo-adk-agent` skill (in `wxo-adk-agent/`) contains all the templates and r
 ### Example Interaction
 
 ```
-You: "Build me a weather travel agent that checks forecasts and suggests what to pack"
+You: "Build me a weather travel agent and upload it to Orchestrate with evaluation test cases"
 
 Bob: [Generates tools/get_weather_forecast.py, agents/weather_agent.yaml, 
-      connections/openweather.yaml, tests, and provides deployment commands]
+      connections/openweather.yaml, tests/weather_test.json, and provides deployment commands]
 
-You: [Run the deployment commands Bob provides]
+You: [Review and approve deployment]
 
-You: [Test in hosted chat at $WO_INSTANCE_URL/chat]
+Bob: [Deploys to hackathon instance and uploads test cases]
+
+You: [Demo in hosted chat at $WO_INSTANCE_URL/chat and run evaluations]
 ```
 
 ### Reference Materials
