@@ -2,33 +2,19 @@
 
 Build and deploy enterprise AI agents to IBM watsonx Orchestrate using the Agent Development Kit (ADK). Describe what you want to build, Bob generates the code, and you deploy straight to a shared hosted instance — no Docker, no local server.
 
----
-
-## Hackathon Tenant Credentials
-
-All participants share one hosted instance:
-
-```bash
-WO_INSTANCE_API_KEY=<API-KEY>
-WO_INSTANCE_URL=https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/f0486067-ab8a-458e-9db1-c44bc11bf146
-```
-
-> These are shared among all hackathon participants. Do not use for production workloads.
-
----
-
 ## 0. Get repo and Bob
 
 ### Bob
 
-1. Go to [bob.ibm.com/download](https://bob.ibm.com/trial)
+1. Go to [bob.ibm.com/trial](https://bob.ibm.com/trial)
 2. Signup
 2. Download Bob or Bob Shell for your platform
 3. Install
-4. Open `bob_wxo_hackathon` directory
 5. Sign in
 
 ### Repo
+
+Go to [Hackathon repo](https://github.com/colehurwitz/bob_wxo_hackathon.git)
 
 ```bash
 # Clone and cd into the repo
@@ -36,11 +22,21 @@ $ git clone https://github.com/colehurwitz/bob_wxo_hackathon.git
 $ cd bob_wxo_hackathon
 ```
 
+You are all set! Open the directory with Bob or run `bob` if you installed Bob Shell
+
 > This guide is written for Bob (Bob IDE) but Bob Shell also will work
 
-## 1. Setup Bob
+## 2. Join watsonx Orchestrate instance
 
-Copy the MCP server config and skills into Bob's config directory so it can talk to watsonx Orchestrate and load the agent-building skill:
+1. Sign in to [cloud.ibm.com](https://cloud.ibm.com/)
+2. Go to [Notifications](https://cloud.ibm.com/notifications)
+3. Find invitation and join
+4. Go to [Resources](https://cloud.ibm.com/resources)
+5. Search for `watsonx Orchestrate-hackathon` and select it
+
+## 3. Setup Bob
+
+Copy the MCP server config and skills into Bob's `.bob` config directory so it can talk to watsonx Orchestrate and load the agent-building skill. There are many mechanisms for both but we will simply copy the files to the right location in the config directory.
 
 ```bash
 # Create Bob's config directory
@@ -53,9 +49,14 @@ cp mcp/mcp.json .bob/mcp.json
 cp -r skills .bob/skills
 ```
 
-Restart Bob after copying — it picks up `mcp.json` and skills on startup.
+That's it! We've configured:
 
-## 2. Setup dev env
+- [ibm-watsonx-orchestrate-mcp-server](https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_docs_server)
+- **wxo-adk-agent skill** - streamlined Skill for building wxO agents
+
+> If the MCP server doesn't connect, try restarting Bob after copying it over — it picks up `mcp.json` and skills on startup.
+
+## 4. Setup dev env
 
 `ibm-watsonx-orchestrate` requires **Python 3.11–3.13** (not 3.14).
 
@@ -95,9 +96,6 @@ $ uv sync
 $ uv run orchestrate --version
 ```
 
-> **Every new terminal** you must reactivate the venv before running `orchestrate` commands.
-> `orchestrate: command not found` almost always means the venv isn't active.
-
 ### Register the Orchestrate environment
 
 > This guide will assume macOS / Linux from now on
@@ -126,7 +124,7 @@ $ uv run orchestrate env list
 
 ---
 
-## 3. Start Building
+## 5. Start Building
 
 You're set up. Open Bob and describe what you want to build — Bob will generate
 the tools, YAML configs, tests, and deployment commands for you.
@@ -137,11 +135,9 @@ the tools, YAML configs, tests, and deployment commands for you.
 Build me a weather travel agent and upload it to Orchestrate with evaluation test cases
 ```
 
-See [HACKATHON.md](HACKATHON.md) for the full build flow, use-case tiers, and judging criteria.
-
 ---
 
-## Use Cases (pick one)
+### Use Cases (pick one)
 
 | Tier | Effort | Examples |
 |------|--------|----------|
@@ -149,9 +145,11 @@ See [HACKATHON.md](HACKATHON.md) for the full build flow, use-case tiers, and ju
 | **2 — Multi-tool agent** | ~½ day | IT helpdesk (KB → ticket → status) · Sales lead enricher · RFP tracker · Document summarizer |
 | **3 — Manager + collaborators** | full day | Employee onboarding (HR + IT + Facilities) · Support triage · Finance close assistant |
 
+> **Free APIs great for Tier 1:** [OpenWeatherMap](https://openweathermap.org/api) (1000 calls/day) · [GitHub REST API](https://docs.github.com/en/rest) (60 req/hr, no auth) · [CoinGecko](https://www.coingecko.com/en/api) (no auth) · [Nager.Date](https://date.nager.at) holidays (no auth) · [icanhazdadjoke](https://icanhazdadjoke.com/api) (no auth) · [NewsAPI](https://newsapi.org) (100 req/day free)
+
 ---
 
-## Development Workflow
+### Development Workflow
 
 ```
 tools/my_tool.py          ← @tool, ToolResponse, docstring
@@ -176,7 +174,7 @@ uv run orchestrate env list
 uv run orchestrate connections add --app-id my_app
 uv run orchestrate connections configure --app-id my_app --env draft --type team --kind key_value
 uv run orchestrate connections set-credentials --app-id my_app --env draft -e token=$TOKEN
-uv run  ]orchestrate tools import --kind python --file tools/my_tool.py --app-id my_app --requirements-file requirements.txt
+uv run orchestrate tools import --kind python --file tools/my_tool.py --app-id my_app --requirements-file requirements.txt
 uv run orchestrate agents import --file agents/my_agent.yaml
 
 # 4. Promote Draft → Live in the UI
@@ -188,7 +186,7 @@ uv run orchestrate agents import --file agents/my_agent.yaml
 
 ---
 
-## Journey Success (judging metric)
+### Journey Success (judging metric)
 
 Each team uploads at least one Journey Success test case — a JSON file describing:
 
@@ -222,30 +220,18 @@ curl -X POST -H "Authorization: Bearer $TOKEN" \
 
 | Symptom | Fix |
 |---------|-----|
-| `orchestrate: command not found` | Run `prefix it with uv run` |
-| `Scope not found` on `env add` | Wrong IAM URL — see `wxo-adk-agent/references/remote_setup.md` |
+| `orchestrate: command not found` | Prefix with `uv run` |
+| `Scope not found` on `env add` (production) | Wrong IAM URL — must be `https://iam.cloud.ibm.com` with no path suffix |
+| `Scope not found` on `env add` (staging) | Add `--iam-url https://iam.platform.test.saas.ibm.com --type mcsp_v1` to `env add` |
 | Tool doesn't appear after import | Missing `--requirements-file` flag |
 | Agent doesn't call tool | Connection not promoted to Live, or tool name mismatch |
 | Test case upload fails | Use `-F "file=@...;type=application/json"` (not `-d`) |
+| Interactive API-key prompt on `env activate` | Pass `--api-key $WO_INSTANCE_API_KEY` — the CLI does not read `WO_*` env vars |
 
 ---
 
 ## Reference
 
-```
-wxo-adk-agent/references/
-  tool_template.py          ← @tool skeleton
-  tool_test_template.py     ← pytest template
-  agent_collaborator.yaml   ← worker agent template
-  agent_manager.yaml        ← router agent template
-  connection_basic_auth.yaml
-  connection_oauth.yaml
-  yaml_schema.md            ← complete YAML field reference
-  deploy_recipe.md          ← full deployment command reference
-  evaluation_recipe.md      ← test case upload and grading
-  pitfalls.md               ← seven common mistakes with fixes
-  remote_setup.md           ← IAM config for non-production instances
-```
-
 - Official docs: [developer.watson-orchestrate.ibm.com](https://developer.watson-orchestrate.ibm.com)
 - ADK package: [ibm-watsonx-orchestrate on PyPI](https://pypi.org/project/ibm-watsonx-orchestrate/)
+- IBM Bob docs: [bob.ibm.com](https://bob.ibm.com)

@@ -10,25 +10,34 @@ Python 3.11–3.13 **only** (NOT 3.14 — `ibm-watsonx-orchestrate` pins `<3.14,
 
 Prefix every python related command with `uv run` to make sure that the correct python env is loaded e.g.
 
-- `uv run pytest`
 - `uv run orchestrate`
+- `uv run pytest`
 - `uv run ruff check`
 
 ```bash
 # Test
-pytest tools/                    # unit tests for all tools
-pytest tools/my_tool_test.py     # single tool test
+uv run pytest tools/                    # unit tests for all tools
+uv run pytest tools/my_tool_test.py     # single tool test
+
+# Auth — CLI does NOT read WO_* env vars; you must activate explicitly
+source .env   # load WO_* vars into shell
+uv run orchestrate env add \
+    --name "$WO_ENV_NAME" --url "$WO_INSTANCE_URL" \
+    --type "$WO_AUTH_TYPE" --iam-url "$WO_IAM_URL"   # idempotent
+uv run orchestrate env activate "$WO_ENV_NAME" --api-key "$WO_INSTANCE_API_KEY"
+uv run orchestrate env list      # confirm active before any import
 
 # Deploy (order is mandatory: connections → tools → agents)
-orchestrate env list             # verify active environment first (missing step = silent fail)
-orchestrate connections add --file connections/my_app.yaml
-orchestrate connections configure --connection-name my_app --env draft
-orchestrate connections set-credentials --connection-name my_app --env draft
-orchestrate tools import --file tools/my_tool.py --app-id my_app --requirements-file requirements.txt
-orchestrate agents import --file agents/my_agent.yaml
+uv run orchestrate connections import --file connections/my_app.yaml
+uv run orchestrate tools import --kind python --file tools/my_tool.py \
+    --app-id my_app --requirements-file requirements.txt
+uv run orchestrate agents import --file agents/my_agent.yaml
 
 # Promote Draft → Live
 # Use the web UI at $WO_INSTANCE_URL/manage/connectors — no CLI command for this
+
+# Or run the generic deploy script (handles auth + import automatically):
+# bash scripts/deploy.sh
 ```
 
 ## Critical Naming Rule
@@ -50,18 +59,6 @@ Violating this causes silent tool binding failures (Pitfall #1).
 - Every `@tool` docstring requires one-line summary + `Args:` block (every param) + `Returns:` (LLM reads this)
 - LLM field: `groq/openai/gpt-oss-120b` (default); `react` style only for explicit chain-of-thought
 - Manager agents: `tools: []`, non-empty `collaborators:`; Collaborator agents: non-empty `tools:`, `collaborators: []`
-
-## Shared Hackathon Instance
-
-All participants share one hosted instance (do not create new instances):
-
-```
-WO_INSTANCE_URL=https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/f0486067-ab8a-458e-9db1-c44bc11bf146
-WO_INSTANCE_API_KEY=***REMOVED***
-WO_IAM_URL=https://iam.cloud.ibm.com
-WO_AUTH_TYPE=ibm_iam
-WO_ENV_NAME=hackathon
-```
 
 ## Journey Success Tests
 
