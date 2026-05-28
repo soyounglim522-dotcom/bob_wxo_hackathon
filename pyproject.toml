@@ -1,0 +1,18 @@
+[project]
+name = "bob-wxo-hackathon"
+version = "0.1.0"
+description = "Build Watsonx Orchestrate agents with Bob and ADK"
+readme = "README.md"
+requires-python = "<3.14,>=3.11"
+dependencies = [
+    "ibm-watsonx-orchestrate>=2.10.0",
+    "pydantic>=2.13.4",
+    "pytest>=9.0.3",
+    "python-dotenv>=1.2.2",
+    "requests>=2.34.2",
+]
+
+[dependency-groups]
+dev = [
+    "ruff>=0.15.15",
+]
