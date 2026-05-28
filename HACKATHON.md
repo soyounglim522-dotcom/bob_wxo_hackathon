@@ -147,27 +147,6 @@ pip install ibm-watsonx-orchestrate
 orchestrate --version
 ```
 
-### Authentication Setup
-
-**Non-interactive authentication works**. The CLI supports the `--api-key` flag:
-
-```bash
-# Register environment (idempotent)
-printf 'Y\n' | orchestrate env add \
-  --name hackathon \
-  --url "$WO_INSTANCE_URL" \
-  --type ibm_iam \
-  --iam-url "https://iam.cloud.ibm.com"
-
-# Activate with API key (non-interactive)
-orchestrate env activate hackathon --api-key "$WO_INSTANCE_API_KEY"
-```
-
-**Key facts:**
-1. The interactive prompt only appears when you omit `--api-key`
-2. The CLI does NOT read `WO_*` environment variables for auth
-3. IAM URL must be the base (`https://iam.cloud.ibm.com`) with no path suffix
-
 ### Linux (Debian/Ubuntu)
 
 ```bash
