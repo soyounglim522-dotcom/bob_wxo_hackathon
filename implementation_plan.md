@@ -24,11 +24,11 @@ cd weather-travel-agent
 cp ../starter/requirements.txt .
 cp ../starter/env.example .env
 
-# Edit .env with your instance details
-# WO_INSTANCE_URL=https://api.staging-wa.watson-orchestrate.ibm.com/instances/<uuid>
-# WO_INSTANCE_API_KEY=<your-key>
-# WO_IAM_URL=https://iam.platform.test.saas.ibm.com
-# WO_AUTH_TYPE=mcsp_v1
+# Edit .env with hackathon tenant credentials (or use these directly):
+# WO_INSTANCE_URL=https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/f0486067-ab8a-458e-9db1-c44bc11bf146
+# WO_INSTANCE_API_KEY=***REMOVED***
+# WO_IAM_URL=https://iam.cloud.ibm.com
+# WO_AUTH_TYPE=production
 # WO_ENV_NAME=hackathon
 
 # Create project structure

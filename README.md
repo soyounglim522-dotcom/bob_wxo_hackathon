@@ -30,13 +30,30 @@ A comprehensive toolkit for building and deploying enterprise AI agents to IBM w
   - Testing strategies
   - Deployment checklist
 
+## 🎯 Hackathon Tenant Credentials
+
+**Dedicated Hackathon Instance** - All participants can use these shared credentials:
+
+```bash
+# Instance URL
+WO_INSTANCE_URL=https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/f0486067-ab8a-458e-9db1-c44bc11bf146
+
+# API Key (shared for hackathon use only)
+WO_INSTANCE_API_KEY=***REMOVED***
+
+# IAM Configuration (US South Production)
+WO_IAM_URL=https://iam.cloud.ibm.com
+WO_AUTH_TYPE=production
+```
+
+> **Note**: These credentials are for hackathon use only and are shared among all participants. Do not use for production workloads.
+
 ## 🚀 Quick Start
 
 ### Prerequisites
 
 - **Python 3.11-3.13** (NOT 3.14 - ADK requires <3.14)
 - **Git** for version control
-- **Orchestrate Instance Credentials** (from hackathon organizer)
 
 ### 1. Clone and Setup
 

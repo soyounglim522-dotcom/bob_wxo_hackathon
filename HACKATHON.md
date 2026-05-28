@@ -104,12 +104,25 @@ gets less credit than a team whose 3-step test case passes end-to-end.
 - **Real deploy, not a demo stub** — every team ships to the same hosted instance. Judging is "open this URL in the hosted chat and try it" plus "run their Journey Success test."
 - **Tested end-to-end** — the skill's templates have been validated against the live ADK (`ibm-watsonx-orchestrate 2.0.0`): tool decorator, agent YAML, connection YAML, every CLI command and flag, and the v2 test-case upload endpoint.
 
+## Hackathon Tenant Credentials
+
+**Dedicated shared instance for all participants:**
+
+```bash
+WO_INSTANCE_URL=https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/f0486067-ab8a-458e-9db1-c44bc11bf146
+WO_INSTANCE_API_KEY=***REMOVED***
+WO_IAM_URL=https://iam.cloud.ibm.com
+WO_AUTH_TYPE=production
+WO_ENV_NAME=hackathon
+```
+
+> **Note**: These credentials are shared among all hackathon participants. Everyone deploys to the same instance for unified judging and demos.
+
 ## What we need from organizers before kickoff
 
-1. Provision the shared hosted Orchestrate instance (or have each hacker spin up
-   their own free trial — see "How hackers get their instance" below).
-2. Generate one API key per hacker (or one team key per team).
-3. Hand out a one-pager with **five** values: `WO_INSTANCE_URL`, `WO_INSTANCE_API_KEY`, `WO_IAM_URL`, `WO_AUTH_TYPE` (e.g. `mcsp_v1` for staging), plus the install command and skill bundle link.
+1. ✅ **Shared hosted Orchestrate instance provisioned** - US South production tenant ready
+2. ✅ **Shared API key generated** - All participants use the same key for simplified setup
+3. ✅ **Credentials documented** - Available in README.md and starter/env.example files
 4. Pick the demo / judging window — each team gets ~3 minutes in the hosted chat, plus the platform auto-runs their uploaded Journey Success tests.
 5. Set a minimum bar — e.g. "at least one Journey Success test case must pass" — so submissions converge on something runnable, not just a chat-demo trick.
 
