@@ -2,7 +2,7 @@
 
 Build and deploy enterprise AI agents to IBM watsonx Orchestrate using the Agent Development Kit (ADK). Describe what you want to build, Bob generates the code, and you deploy straight to a shared hosted instance — no Docker, no local server.
 
-## 0. Get repo and Bob
+## 1. Get repo and Bob
 
 ### Bob
 
