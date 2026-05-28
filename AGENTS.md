@@ -14,7 +14,6 @@ Prefix every python related command with `uv run` to make sure that the correct 
 - `uv run orchestrate`
 - `uv run ruff check`
 
-
 ```bash
 # Test
 pytest tools/                    # unit tests for all tools
@@ -52,16 +51,6 @@ Violating this causes silent tool binding failures (Pitfall #1).
 - LLM field: `groq/openai/gpt-oss-120b` (default); `react` style only for explicit chain-of-thought
 - Manager agents: `tools: []`, non-empty `collaborators:`; Collaborator agents: non-empty `tools:`, `collaborators: []`
 
-## Reference Templates
-
-All canonical patterns live in [`wxo-adk-agent/references/`](wxo-adk-agent/references/):
-- [`tool_template.py`](wxo-adk-agent/references/tool_template.py) — `@tool` skeleton with `ToolResponse`/`ErrorDetails`
-- [`tool_test_template.py`](wxo-adk-agent/references/tool_test_template.py) — pytest happy + error path pattern
-- [`agent_collaborator.yaml`](wxo-adk-agent/references/agent_collaborator.yaml) / [`agent_manager.yaml`](wxo-adk-agent/references/agent_manager.yaml)
-- [`connection_basic_auth.yaml`](wxo-adk-agent/references/connection_basic_auth.yaml) / [`connection_oauth.yaml`](wxo-adk-agent/references/connection_oauth.yaml)
-- [`deploy_recipe.md`](wxo-adk-agent/references/deploy_recipe.md) — full CLI sequence
-- [`pitfalls.md`](wxo-adk-agent/references/pitfalls.md) — 7 common mistakes with wrong/right examples
-
 ## Shared Hackathon Instance
 
 All participants share one hosted instance (do not create new instances):
@@ -76,4 +65,4 @@ WO_ENV_NAME=hackathon
 
 ## Journey Success Tests
 
-Test cases in `tests/*.json` — see [`evaluation_template.json`](wxo-adk-agent/references/evaluation_template.json). Each `goal_details` entry is either `type: tool_call` (arg matching: `strict`/`fuzzy`/`optional`) or `type: text` (keyword matching). All goals must pass.
+Test cases in `tests/*.json` — see [`evaluation_template.json`](skills/wxo-adk-agent/references/evaluation_template.json). Each `goal_details` entry is either `type: tool_call` (arg matching: `strict`/`fuzzy`/`optional`) or `type: text` (keyword matching). All goals must pass.

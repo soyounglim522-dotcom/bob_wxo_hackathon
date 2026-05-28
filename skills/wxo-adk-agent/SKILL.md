@@ -262,6 +262,31 @@ Full wrong/right examples in `references/pitfalls.md`.
 - One agent per YAML, filename stem matches the `name:` field.
 - One `app_id` per connection YAML, stem matches `app_id`.
 
+## Examples
+
+Working end-to-end examples live in `examples/`. Each sub-directory is a
+self-contained project you can study, copy, or deploy as-is. Use them as
+starting points when the reference templates feel too abstract.
+
+| Directory | Pattern | What it shows |
+|---|---|---|
+| [`examples/personal_banking/`](examples/personal_banking/) | Multi-tool collaborator | `list_accounts`, `transfer_money`, `get_contact`, `change_contact` wired to an Astra DB backend; `import-all.sh` deploys end-to-end |
+| [`examples/customer_care/`](examples/customer_care/) | Manager + two collaborators | Separate `customer_care` and `servicenow` tool packages; manager routes between them; shows multi-package `requirements.txt` split |
+| [`examples/customer_care_planner/`](examples/customer_care_planner/) | Planner-style agent | Same domain as `customer_care` but uses the `planner` style with a `format_task_results` join tool; compare against the default-style version to understand tradeoffs |
+| [`examples/healthcare_provider/`](examples/healthcare_provider/) | OpenAPI tool (no Python) | Imports a pre-built OpenAPI spec (`get-healthcare-providers.yml`) directly — no Python `@tool` needed; shows the `openapi` tool kind |
+| [`examples/ibm_knowledge/`](examples/ibm_knowledge/) | Knowledge-base agent | Pairs a `stock_price` tool with a vector knowledge base; includes both static and dynamic-mode variants plus `remove_all.sh` for clean teardown |
+| [`examples/agentic_memory/`](examples/agentic_memory/) | Agentic memory / ticket creation | Flat-file example: one `@tool` (`create_patient_support_ticket.py`) + one agent YAML in the same directory; minimal structure, great for learning the shape |
+| [`examples/voice_enabled_elevenlabs/`](examples/voice_enabled_elevenlabs/) | Voice channel | Shows how to attach an ElevenLabs TTS voice config to an agent; `voice/` holds two config variants (standard and advanced) |
+
+### When to look at an example
+
+- **"I need a manager/collaborator split"** → `customer_care/` or `customer_care_planner/`
+- **"I want to call an existing REST API without writing Python"** → `healthcare_provider/`
+- **"I need persistent memory or ticket creation"** → `agentic_memory/`
+- **"I need a knowledge base alongside a tool"** → `ibm_knowledge/`
+- **"I'm building a voice-enabled agent"** → `voice_enabled_elevenlabs/`
+- **"I need a complete multi-tool CRUD example"** → `personal_banking/`
+
 ## Reference files
 
 - `references/tool_template.py` — runnable `@tool` skeleton with `ToolResponse`/`ErrorDetails` inlined.

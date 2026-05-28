@@ -17,13 +17,26 @@ WO_INSTANCE_URL=https://api.us-south.watson-orchestrate.cloud.ibm.com/instances/
 
 ---
 
-## 0. Get Repo
+## 0. Get repo and Bob
+
+### Bob
+
+1. Go to [bob.ibm.com/download](https://bob.ibm.com/trial)
+2. Signup
+2. Download Bob or Bob Shell for your platform
+3. Install
+4. Open `bob_wxo_hackathon` directory
+5. Sign in
+
+### Repo
 
 ```bash
 # Clone and cd into the repo
 $ git clone https://github.com/colehurwitz/bob_wxo_hackathon.git
 $ cd bob_wxo_hackathon
 ```
+
+> This guide is written for Bob (Bob IDE) but Bob Shell also will work
 
 ## 1. Setup Bob
 
@@ -42,7 +55,7 @@ cp -r skills .bob/skills
 
 Restart Bob after copying — it picks up `mcp.json` and skills on startup.
 
-## 2. Setup env
+## 2. Setup dev env
 
 `ibm-watsonx-orchestrate` requires **Python 3.11–3.13** (not 3.14).
 
@@ -163,8 +176,7 @@ uv run orchestrate env list
 uv run orchestrate connections add --app-id my_app
 uv run orchestrate connections configure --app-id my_app --env draft --type team --kind key_value
 uv run orchestrate connections set-credentials --app-id my_app --env draft -e token=$TOKEN
-uv run  ]orchestrate tools import --kind python --file tools/my_tool.py \
-    --app-id my_app --requirements-file requirements.txt
+uv run  ]orchestrate tools import --kind python --file tools/my_tool.py --app-id my_app --requirements-file requirements.txt
 uv run orchestrate agents import --file agents/my_agent.yaml
 
 # 4. Promote Draft → Live in the UI
