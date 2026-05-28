@@ -199,17 +199,14 @@ From the IBM Cloud Dashboard (where you are redirected from the IBM Cloud invita
 
 Then, under **AI / Machine Learning**, select the WxO Hackathon instance and **launch** the WxO UI.
 
-In the UI sidebar, click **Build** and select your deployed tool.
+In the UI sidebar, click **Build** and select your deployed agent.
 <img width="1424" height="665" alt="sc2" src="https://github.com/user-attachments/assets/f1c8ff6e-33f0-4c45-a322-fae790b39f9d" />
-
-Test your agent by typing in the chatbox, and you will be able to save the log as a test and verify what tool calls were used. Once your tests are saved, you will be able to evaluate the test cases to ensure consistency.
-<img width="689" height="886" alt="sc3" src="https://github.com/user-attachments/assets/0d083265-9d5a-473a-b79a-1d3f7aae3151" />
 
 ---
 
 ### Journey Success (judging metric)
 
-Each team uploads at least one Journey Success test case — a JSON file describing:
+Each team can upload at least one Journey Success test case — a JSON file describing:
 
 - The user prompt that starts the conversation
 - The tools the agent must call, in order
@@ -234,6 +231,9 @@ curl -X POST -H "Authorization: Bearer $TOKEN" \
     "$WO_INSTANCE_URL/v1/orchestrate/agent/$AGENT_ID/test_case/v2" \
     -F "file=@tests/my_test.json;type=application/json"
 ```
+
+You can also test your agent in the UI by typing in the chatbox, and you will be able to save the log as a test and verify what tool calls were used. Once your tests are saved, you will be able to evaluate the test cases to ensure consistency.
+<img width="689" height="886" alt="sc3" src="https://github.com/user-attachments/assets/0d083265-9d5a-473a-b79a-1d3f7aae3151" />
 
 ---
 
