@@ -1,20 +1,11 @@
 # watsonx Orchestrate Hackathon Bundle
 
-Build and deploy enterprise AI agents to IBM watsonx Orchestrate using the Agent Development Kit (ADK). Describe what you want to build, Bob generates the code, and you deploy straight to a shared hosted instance — no Docker, no local server.
+에이전트 개발 키트(ADK)를 사용하여 엔터프라이즈 AI 에이전트를 구축하고 IBM Watsonx Orchestrate에 배포하세요. 
+구축하고자 하는 내용을 설명하기만 하면 Bob이 코드를 생성해 주며, Docker나 로컬 서버 없이 바로 공유 호스팅 인스턴스에 배포할 수 있습니다.
 
 ## 1. Get repo and Bob
 
-### Bob
-
-1. Go to [bob.ibm.com/trial](https://bob.ibm.com/trial)
-2. Signup
-2. Download Bob or Bob Shell for your platform
-3. Install
-5. Sign in
-
 ### Repo
-
-Go to [Hackathon repo](https://github.com/colehurwitz/bob_wxo_hackathon.git)
 
 ```bash
 # Clone and cd into the repo
@@ -22,21 +13,21 @@ $ git clone https://github.com/colehurwitz/bob_wxo_hackathon.git
 $ cd bob_wxo_hackathon
 ```
 
-You are all set! Open the directory with Bob or run `bob` if you installed Bob Shell
+이제 모든 준비가 끝났습니다! Bob으로 해당 디렉터리를 열어 실행하세요.
 
-> This guide is written for Bob (Bob IDE) but Bob Shell also will work
+## 2. Get watsonx Orchestrate
 
-## 2. Join watsonx Orchestrate instance
-
-1. Sign in to [cloud.ibm.com](https://cloud.ibm.com/)
-2. Go to [Notifications](https://cloud.ibm.com/notifications)
-3. Find invitation and join
-4. Go to [Resources](https://cloud.ibm.com/resources)
-5. Search for `watsonx Orchestrate-hackathon` and select it
+1. 메일로 도착한 IBM Cloud Join now 눌러서 wxo 인스턴스에 접속합니다.
+2. IBM Cloud > Resource List > AI/Machine Learning > watsonx Orchestrate 선택합니다.
+3. Credential에서 URL 복사하고 메모장에 적어둡니다.
+4. 상단 바의 Manage > IAM 선택합니다.
+5. 왼쪽 바의 Manage Identities > API Keys 선택합니다.
+6. 오른쪽의 Create 파란색 버튼 누르고, wxo-api-<본인이름> 작성합니다.
+7. API Key 복사하고 메모장에 적어둡니다.
 
 ## 3. Setup Bob
 
-Copy the MCP server config and skills into Bob's `.bob` config directory so it can talk to watsonx Orchestrate and load the agent-building skill. There are many mechanisms for both but we will simply copy the files to the right location in the config directory.
+MCP 서버 구성 파일과 스킬을 Bob의 `.bob` 구성 디렉터리에 복사하여, Bob이 watsonx Orchestrate와 통신하고 에이전트 구축용 스킬을 불러올 수 있도록 합니다. 두 작업 모두를 수행하는 방법은 여러 가지가 있지만, 여기서는 단순히 파일을 구성 디렉터리의 적절한 위치로 복사하는 방법을 사용하겠습니다.
 
 ```bash
 # Create Bob's config directory
@@ -54,13 +45,13 @@ That's it! We've configured:
 - [ibm-watsonx-orchestrate-mcp-server](https://developer.watson-orchestrate.ibm.com/mcp_server/wxOmcp_docs_server)
 - **wxo-adk-agent skill** - streamlined Skill for building wxO agents
 
-> If the MCP server doesn't connect, try restarting Bob after copying it over — it picks up `mcp.json` and skills on startup.
+> MCP 서버에 연결되지 않으면, Bob을 복사한 후 다시 시작해 보세요. Bob은 시작 시 `mcp.json` 파일과 스킬 정보를 자동으로 불러옵니다.
 
 ## 4. Setup dev env
 
 `ibm-watsonx-orchestrate` requires **Python 3.11–3.13** (not 3.14).
 
-This guide uses [uv](https://astral.sh/uv) and it's pip-compatible interface. If you want to use different tooling, go for it!
+이 가이드에서는 [uv](https://astral.sh/uv)와 그 pip 호환 인터페이스를 사용합니다. 
 
 ### macOS / Linux
 
@@ -114,7 +105,6 @@ $ uv run orchestrate env add \
     --name hackathon \
     --url $WO_INSTANCE_URL \
     --iam-url $WO_IAM_URL \
-    --type $WO_AUTH_TYPE
 [INFO] - Environment 'hackathon' has been created
 
 # Activate
