@@ -219,11 +219,12 @@ curl -X POST -H "Authorization: Bearer $TOKEN" \
 
 ## 0714 해커톤 전까지 보고 오면 좋은 문서들
 Bob이 2026년 6월 25일, v2로 새롭게 업데이트되었습니다. 아래 Docs를 참고해서 새로운 기능에 익숙해지면 어떨까요?
-Bob Docs : [https://bob.ibm.com/docs/ide](https://bob.ibm.com/docs/ide)
+- Bob Docs : [https://bob.ibm.com/docs/ide](https://bob.ibm.com/docs/ide)
+- getting started with Bob : [pdf]()
 
-Bob L3 : [https://learn.ibm.com/course/view.php?id=18804](https://learn.ibm.com/course/view.php?id=18804)
-Wxo L3 : [https://learn.ibm.com/course/view.php?id=15986](https://learn.ibm.com/course/view.php?id=15986)
-Instana L3 : [https://learn.ibm.com/course/view.php?id=10326](https://learn.ibm.com/course/view.php?id=10326)
+- Bob L3 : [https://learn.ibm.com/course/view.php?id=18804](https://learn.ibm.com/course/view.php?id=18804)
+- Wxo L3 : [https://learn.ibm.com/course/view.php?id=15986](https://learn.ibm.com/course/view.php?id=15986)
+- Instana L3 : [https://learn.ibm.com/course/view.php?id=10326](https://learn.ibm.com/course/view.php?id=10326)
 
 ---
 
